@@ -1,6 +1,8 @@
 # Carousel Variations for the Wordpress Query Loop Block
 
-A lightweight WordPress plugin that adds two carousel-style variations to the native Query Loop block. Create horizontally scrolling post carousels without any external dependencies.
+
+This plugin extends the default WordPress Query Loop block by adding two  carousel-style variations. Both variations transform your post lists into horizontal, scrollable carousels with smooth scroll-snap behavior and elegant arrow navigation.
+
 
 ## Features
 
@@ -10,190 +12,60 @@ A lightweight WordPress plugin that adds two carousel-style variations to the na
 - **Scroll-Snap Technology** - Smooth, native scrolling behavior
 - **Infinite Looping** - Seamlessly loops back to the beginning
 - **Minimal Styling** - Inherits your site's design system
-- **Keyboard Accessible** - Navigate with arrow keys
-- **Responsive Design** - Adapts to different screen sizes
 - **Zero Dependencies** - Lightweight and fast
+
+### Style Variation 1: Featured Image with Headline
+A clean, minimalist layout featuring the post's featured image positioned above a linked headline. Perfect for showcasing blog posts, portfolio items, or any content where imagery and titles are key.
+
+### Style Variation 2: Cover with Overlay
+A dramatic cover-style layout using the featured image as a background, overlaid with a transparent black gradient and white linked headline text. Ideal for hero sections, featured content, or creating visual impact.
+
+Both variations maintain full compatibility with WordPress's native Query Loop controls, allowing you to configure your query parameters, post types, taxonomies, and all other settings exactly as you would with the default block.
 
 ## Installation
 
-1. Download or clone this repository
-2. Upload the `query-loop-carousel` folder to your `/wp-content/plugins/` directory
-3. Activate the plugin through the 'Plugins' menu in WordPress
-4. Start using the carousel variations in the block editor
-
-## Usage
-
-### Adding a Carousel to Your Page
-
-1. In the WordPress block editor, click the **+** button to add a new block
-2. Search for "Carousel" in the block inserter
-3. Choose one of the two available variations:
-   - **Carousel: Image Above**
-   - **Carousel: Cover with Overlay**
-4. Configure your query using WordPress's standard Query Loop controls (post type, categories, number of posts, etc.)
-5. Publish or preview your page
-
-### Carousel Variation 1: Featured Image Above Headline
-
-This variation displays posts in a clean, minimalist layout:
-
-- Featured image displayed at the top
-- Linked headline below the image
-- Perfect for blog posts, portfolios, or product showcases
-- Images maintain 16:9 aspect ratio by default
-
-**Best for:** Traditional blog layouts, news sites, portfolio galleries
-
-### Carousel Variation 2: Cover Image with Headline Overlay
-
-This variation creates a more dramatic, visual-first presentation:
-
-- Featured image used as a full-cover background
-- Semi-transparent black overlay (50% opacity)
-- White linked headline overlaid on the image
-- Minimum height of 300px for consistent card sizes
-
-**Best for:** Featured content, hero sections, magazine-style layouts, visual storytelling
-
-## Customization
-
-### Query Settings
-
-Use WordPress's built-in Query Loop controls to customize:
-
-- **Post Type** - Posts, pages, or custom post types
-- **Number of Items** - Default is 6 posts
-- **Order & Sorting** - By date, title, or custom fields
-- **Filters** - Categories, tags, authors, etc.
-- **Exclude Posts** - Manually exclude specific posts
-
-### Styling
-
-The plugin uses minimal CSS that inherits from your theme. You can add custom CSS to further customize:
-
-```css
-/* Adjust card width */
-.is-style-carousel-image-above .carousel-container > li {
-	flex: 0 0 400px;
-}
-
-/* Customize navigation buttons */
-.carousel-nav-button {
-	background: your-color;
-	border-color: your-color;
-}
-
-/* Adjust overlay opacity on cover style */
-.is-style-carousel-cover-overlay .wp-block-cover::before {
-	opacity: 0.7;
-}
-```
-
-### Card Dimensions
-
-By default, carousel cards are responsive:
-- Mobile: 280px wide
-- Tablet (768px+): 320px wide
-- Desktop (1024px+): 360px wide
-
-## Functionality
-
-### Navigation
-
-- **Arrow Buttons** - Click left/right arrows to navigate
-- **Keyboard Navigation** - Use left/right arrow keys
-- **Touch/Swipe** - Native touch scrolling on mobile devices
-- **Mouse Wheel** - Scroll horizontally with mouse wheel (browser-dependent)
-
-### Looping Behavior
-
-The carousel automatically loops:
-- Clicking "next" on the last item returns to the first item
-- Clicking "previous" on the first item jumps to the last item
-- Seamless infinite scrolling experience
-
-### Scroll Snap
-
-Uses CSS scroll-snap for smooth, predictable scrolling:
-- Cards snap into place automatically
-- Prevents awkward half-card positions
-- Works with both navigation buttons and direct scrolling
-
-## Browser Support
-
-This plugin uses modern web standards and supports:
-
-- Chrome/Edge 69+
-- Firefox 68+
-- Safari 11+
-- Opera 56+
-
-Scroll-snap is widely supported in all modern browsers.
-
-## Technical Details
-
-### File Structure
-
-```
-query-loop-carousel/
-├── query-loop-carousel.php    # Main plugin file
-├── variations.js               # Block variation registration
-├── carousel-style.css          # Carousel styling
-├── carousel-script.js          # Navigation functionality
-└── README.md                   # Documentation
-```
-
-### Performance
-
-- **Lightweight** - Total plugin size under 15KB
-- **No External Dependencies** - No jQuery, no third-party libraries
-- **Vanilla JavaScript** - Fast, modern ES6+ code
-- **CSS-Only Scrolling** - Uses native browser scroll-snap
-- **Lazy Loading Compatible** - Works with WordPress's native lazy loading
-
-### Accessibility
-
-- Semantic HTML structure
-- ARIA labels on navigation buttons
-- Keyboard navigation support
-- Focus indicators on interactive elements
-- Screen reader friendly
+1. Upload the plugin files to the `/wp-content/plugins/query-loop-carousel` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress
+3. Insert a Query Loop block in the block editor
+4. In the block toolbar or inspector, look for "Styles" and select either "Carousel - Image & Title" or "Carousel - Cover Style"
+5. Configure your query settings as normal using the WordPress Query Loop controls
 
 ## Frequently Asked Questions
 
-### Can I use custom post types?
+### Does this work with custom post types? 
 
-Yes! The plugin works with any post type. Simply select your desired post type in the Query Loop settings.
+Yes! The style variations work with any post type that the Query Loop block supports. Simply configure your query using the standard WordPress controls.
 
-### Can I change the number of posts displayed?
+### Can I customize the arrow button styles? =
 
-Absolutely. Use the "Items per page" setting in the Query Loop block controls to set how many posts appear in the carousel.
+Yes, the arrows inherit basic styles from your theme and can be customized with CSS. They use minimal styling by default to blend with any theme.
 
-### Will this work with my theme?
+### Will this work on mobile devices? 
 
-Yes. The plugin uses minimal styling that inherits from your theme's design system. Colors, fonts, and spacing will match your site's existing styles.
+Absolutely. The carousel is fully responsive and uses native scroll behavior, making it touch-friendly on mobile and tablet devices.
 
-### Does it work with the block editor preview?
+### Does it require any external JavaScript libraries? 
 
-Yes. The carousel functionality works in both the editor preview and on the frontend.
+No, the plugin uses pure vanilla JavaScript with no external dependencies, keeping your site fast and lightweight.
 
-### Can I have multiple carousels on one page?
+### Can I adjust the number of posts shown? 
 
-Yes. You can add as many carousel blocks as you need, and each will function independently.
+Yes, use the standard Query Loop controls to set the number of posts per page. The carousel will adapt automatically.
 
-### Does it work with featured images?
+## Screenshots 
 
-Yes. Both variations require featured images to display properly. Make sure your posts have featured images set.
+1. Carousel variation with featured image above headline
+2. Cover style variation with background image and overlay
+3. Style selection in the block editor
 
-## Changelog
+## Changelog 
 
-### Version 1.0.0
-- Initial release
-- Two carousel variations (Image Above, Cover with Overlay)
-- Scroll-snap navigation
-- Infinite looping
-- Keyboard accessibility
-- Responsive design
+= 0.1.0 =
+* Initial release
+* Two carousel style variations for Query Loop block
+* Horizontal scroll with scroll-snap
+* Arrow navigation with infinite looping
+* Minimal, theme-friendly styling
 
 ## Credits
 
