@@ -5,7 +5,7 @@ This plugin extends the default WordPress Query Loop block by adding two  carous
 
 
 ## Features
- 
+
 - **Two Pre-Built Carousel Styles** - Choose from image-above or cover-overlay layouts
 - **Native WordPress Integration** - Uses the standard Query Loop block controls
 - **Pure Vanilla JavaScript** - No external libraries required
