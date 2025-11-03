@@ -1,0 +1,147 @@
+/**
+ * Query Loop Carousel Styles
+ */
+
+/* Common carousel wrapper styles */
+.is-style-carousel-image-above,
+.is-style-carousel-cover-overlay {
+    position: relative;
+    margin: 2rem 0;
+}
+
+/* Carousel container with scroll snap */
+.is-style-carousel-image-above .carousel-container,
+.is-style-carousel-cover-overlay .carousel-container {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 1.5rem;
+    padding: 0.5rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Hide scrollbar for Chrome/Safari/Opera */
+.is-style-carousel-image-above .carousel-container::-webkit-scrollbar,
+.is-style-carousel-cover-overlay .carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Individual post items */
+.is-style-carousel-image-above .carousel-container > li,
+.is-style-carousel-cover-overlay .carousel-container > li {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    list-style: none;
+    margin: 0;
+}
+
+/* Navigation arrows */
+.carousel-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.carousel-nav-button:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-nav-button:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.carousel-nav-button.prev {
+    left: 0;
+}
+
+.carousel-nav-button.next {
+    right: 0;
+}
+
+.carousel-nav-button svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Style 1: Image Above Headline */
+.is-style-carousel-image-above .wp-block-post-featured-image {
+    margin-bottom: 0.75rem;
+}
+
+.is-style-carousel-image-above .wp-block-post-featured-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+}
+
+.is-style-carousel-image-above .wp-block-post-title {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.is-style-carousel-image-above .wp-block-post-title a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.is-style-carousel-image-above .wp-block-post-title a:hover {
+    text-decoration: underline;
+}
+
+/* Style 2: Cover with Overlay */
+.is-style-carousel-cover-overlay .wp-block-cover {
+    margin: 0;
+    min-height: 300px;
+    border-radius: 4px;
+}
+
+.is-style-carousel-cover-overlay .wp-block-post-title {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    color: white;
+}
+
+.is-style-carousel-cover-overlay .wp-block-post-title a {
+    text-decoration: none;
+    color: white;
+}
+
+.is-style-carousel-cover-overlay .wp-block-post-title a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .is-style-carousel-image-above .carousel-container > li,
+    .is-style-carousel-cover-overlay .carousel-container > li {
+        flex: 0 0 320px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .is-style-carousel-image-above .carousel-container > li,
+    .is-style-carousel-cover-overlay .carousel-container > li {
+        flex: 0 0 360px;
+    }
+}
