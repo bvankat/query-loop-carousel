@@ -1,0 +1,718 @@
+<artefact xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="artefact.xsd" name="Query Loop Carousel Variations" slug="query-loop-carousel" type="code-package" schemaVersion="2">
+  <file path="readme.txt">
+    <description>This file contains the readme information for the block. It is used to provide information about the block, its usage, and any other relevant details.</description>
+    <content><![CDATA[
+=== Query Loop Carousel Variations ===
+
+Contributors:      WordPress Telex
+Tags:              block, query loop, carousel, style variations
+Tested up to:      6.8
+Stable tag:        0.1.0
+License:           GPLv2 or later
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+
+Add beautiful horizontal carousel style variations to the WordPress Query Loop block with smooth scrolling and minimal design.
+
+== Description ==
+
+This plugin extends the default WordPress Query Loop block by adding two stunning carousel-style variations. Both variations transform your post listings into horizontal, scrollable carousels with smooth scroll-snap behavior and elegant arrow navigation.
+
+**Features:**
+
+* Two distinct carousel style variations
+* Horizontal one-row layout with scroll-snap
+* Minimal chrome with simple left/right arrow buttons
+* Infinite loop scrolling (returns to first item after last)
+* Inherits your site's existing styles
+* No external dependencies - pure vanilla JavaScript
+* Fully responsive design
+* Works with all query loop settings
+
+**Style Variation 1: Featured Image with Headline**
+A clean, minimalist layout featuring the post's featured image positioned above a linked headline. Perfect for showcasing blog posts, portfolio items, or any content where imagery and titles are key.
+
+**Style Variation 2: Cover with Overlay**
+A dramatic cover-style layout using the featured image as a background, overlaid with a transparent black gradient and white linked headline text. Ideal for hero sections, featured content, or creating visual impact.
+
+Both variations maintain full compatibility with WordPress's native Query Loop controls, allowing you to configure your query parameters, post types, taxonomies, and all other settings exactly as you would with the default block.
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/query-loop-carousel` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress
+3. Insert a Query Loop block in the block editor
+4. In the block toolbar or inspector, look for "Styles" and select either "Carousel - Image & Title" or "Carousel - Cover Style"
+5. Configure your query settings as normal using the WordPress Query Loop controls
+
+== Frequently Asked Questions ==
+
+= Does this work with custom post types? =
+
+Yes! The style variations work with any post type that the Query Loop block supports. Simply configure your query using the standard WordPress controls.
+
+= Can I customize the arrow button styles? =
+
+Yes, the arrows inherit basic styles from your theme and can be customized with CSS. They use minimal styling by default to blend with any theme.
+
+= Will this work on mobile devices? =
+
+Absolutely. The carousel is fully responsive and uses native scroll behavior, making it touch-friendly on mobile and tablet devices.
+
+= Does it require any external JavaScript libraries? =
+
+No, the plugin uses pure vanilla JavaScript with no external dependencies, keeping your site fast and lightweight.
+
+= Can I adjust the number of posts shown? =
+
+Yes, use the standard Query Loop controls to set the number of posts per page. The carousel will adapt automatically.
+
+== Screenshots ==
+
+1. Carousel variation with featured image above headline
+2. Cover style variation with background image and overlay
+3. Style selection in the block editor
+
+== Changelog ==
+
+= 0.1.0 =
+* Initial release
+* Two carousel style variations for Query Loop block
+* Horizontal scroll with scroll-snap
+* Arrow navigation with infinite looping
+* Minimal, theme-friendly styling
+
+== Upgrade Notice ==
+
+= 0.1.0 =
+Initial release of Query Loop Carousel Variations.
+]]></content>
+  </file>
+  <file path="query-loop-carousel.php">
+    <description>This file contains the block registration code in the form of a single block plugin. Any other plugin related functionality should be added to this file. All block rendering functionality should go to the `render.php` file.</description>
+    <content><![CDATA[<?php
+/**
+ * Plugin Name:       Query Loop Carousel Variations
+ * Description:       Adds two beautiful horizontal carousel style variations to the Query Loop block with smooth scrolling and minimal design.
+ * Version:           0.1.0
+ * Requires at least: 6.1
+ * Requires PHP:      7.4
+ * Author:            WordPress Telex
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       query-loop-carousel
+ *
+ * @package QueryLoopCarousel
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Register block style variations for Query Loop
+ */
+function query_loop_carousel_register_block_styles() {
+	// Register the featured image + title variation
+	register_block_style(
+		'core/query',
+		array(
+			'name'  => 'carousel-image-title',
+			'label' => __( 'Carousel - Image & Title', 'query-loop-carousel' ),
+		)
+	);
+
+	// Register the cover style variation
+	register_block_style(
+		'core/query',
+		array(
+			'name'  => 'carousel-cover',
+			'label' => __( 'Carousel - Cover Style', 'query-loop-carousel' ),
+		)
+	);
+}
+add_action( 'init', 'query_loop_carousel_register_block_styles' );
+
+/**
+ * Enqueue frontend styles and scripts
+ */
+function query_loop_carousel_enqueue_assets() {
+	// Enqueue frontend styles
+	wp_enqueue_style(
+		'query-loop-carousel-style',
+		plugins_url( 'build/style-index.css', __FILE__ ),
+		array(),
+		filemtime( plugin_dir_path( __FILE__ ) . 'build/style-index.css' )
+	);
+
+	// Enqueue frontend script
+	wp_enqueue_script(
+		'query-loop-carousel-script',
+		plugins_url( 'build/view.js', __FILE__ ),
+		array(),
+		filemtime( plugin_dir_path( __FILE__ ) . 'build/view.js' ),
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'query_loop_carousel_enqueue_assets' );
+
+/**
+ * Enqueue editor styles
+ */
+function query_loop_carousel_enqueue_editor_assets() {
+	wp_enqueue_style(
+		'query-loop-carousel-editor-style',
+		plugins_url( 'build/index.css', __FILE__ ),
+		array( 'wp-edit-blocks' ),
+		filemtime( plugin_dir_path( __FILE__ ) . 'build/index.css' )
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'query_loop_carousel_enqueue_editor_assets' );
+]]></content>
+  </file>
+  <file path="src/block.json">
+    <description>This file contains metadata about the block including its name, title, category, icon, and other properties.</description>
+    <content><![CDATA[
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "telex/query-loop-carousel",
+	"version": "0.1.0",
+	"title": "Query Loop Carousel Variations",
+	"category": "design",
+	"icon": "slides",
+	"description": "Adds carousel style variations to the Query Loop block",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "query-loop-carousel",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}
+]]></content>
+  </file>
+  <file path="src/index.js">
+    <description>This file registers the block, specifies the edit and save functions, and loads the block's metadata</description>
+    <content><![CDATA[
+/**
+ * Registers a new block provided a unique name and an object defining its behavior.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+import { registerBlockType } from '@wordpress/blocks';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * All files containing `style` keyword are bundled together. The code used
+ * gets applied both to the front of your site and to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './style.scss';
+
+/**
+ * Internal dependencies
+ */
+import Edit from './edit';
+import metadata from './block.json';
+
+/**
+ * Every block starts by registering a new block type definition.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+registerBlockType( metadata.name, {
+	/**
+	 * @see ./edit.js
+	 */
+	edit: Edit,
+} );
+]]></content>
+  </file>
+  <file path="src/edit.js">
+    <description>This file contains the edit function for the block which is responsible for rendering the block in the editor.</description>
+    <content><![CDATA[
+/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ */
+import { useBlockProps } from '@wordpress/block-editor';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Those files can contain any CSS code that gets applied to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './editor.scss';
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @return {Element} Element to render.
+ */
+export default function Edit() {
+	return (
+		<p { ...useBlockProps() }>
+			{ __( 'Query Loop Carousel Variations – The carousel styles are applied to Query Loop blocks via block style variations.', 'query-loop-carousel' ) }
+		</p>
+	);
+}
+]]></content>
+  </file>
+  <file path="src/save.js">
+    <description>This file contains the save function for the block which is responsible for creating the static result of rendering the block on the client to display the saved result on the front end.</description>
+    <content><![CDATA[
+]]></content>
+  </file>
+  <file path="src/style.scss">
+    <description>This file contains styles for the block in the front end.</description>
+    <content><![CDATA[
+/**
+ * Frontend styles for Query Loop Carousel variations
+ */
+
+/* Common carousel styles */
+.wp-block-query.is-style-carousel-image-title,
+.wp-block-query.is-style-carousel-cover {
+	position: relative;
+	
+	.wp-block-post-template {
+		display: flex;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-behavior: smooth;
+		gap: 1.5rem;
+		padding: 0 2.5rem;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		
+		> li {
+			flex: 0 0 auto;
+			width: clamp(250px, 33.333%, 400px);
+			scroll-snap-align: start;
+			list-style: none;
+		}
+	}
+	
+	/* Navigation arrows */
+	.carousel-nav {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		background: rgba(255, 255, 255, 0.9);
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		z-index: 10;
+		transition: all 0.2s ease;
+		
+		&:hover {
+			background: rgba(255, 255, 255, 1);
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		}
+		
+		&.carousel-prev {
+			left: 0;
+		}
+		
+		&.carousel-next {
+			right: 0;
+		}
+		
+		svg {
+			width: 20px;
+			height: 20px;
+			fill: currentColor;
+		}
+	}
+}
+
+/* Variation 1: Featured Image + Title */
+.wp-block-query.is-style-carousel-image-title {
+	.wp-block-post-template > li {
+		display: flex;
+		flex-direction: column;
+		
+		.wp-block-post-featured-image {
+			margin-bottom: 0.75rem;
+			
+			img {
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+				border-radius: 4px;
+			}
+		}
+		
+		.wp-block-post-title {
+			font-size: 1.125rem;
+			line-height: 1.4;
+			margin: 0;
+			
+			a {
+				text-decoration: none;
+				color: inherit;
+				
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}
+
+/* Variation 2: Cover Style with Overlay */
+.wp-block-query.is-style-carousel-cover {
+	.wp-block-post-template > li {
+		position: relative;
+		height: 300px;
+		border-radius: 4px;
+		overflow: hidden;
+		
+		.wp-block-post-featured-image {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+			}
+		}
+		
+		.wp-block-post-title {
+			position: absolute;
+			bottom: 1.5rem;
+			left: 1.5rem;
+			right: 1.5rem;
+			z-index: 1;
+			font-size: 1.5rem;
+			line-height: 1.3;
+			margin: 0;
+			
+			a {
+				text-decoration: none;
+				color: #fff;
+				text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+				
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.wp-block-query.is-style-carousel-image-title,
+	.wp-block-query.is-style-carousel-cover {
+		.wp-block-post-template > li {
+			width: clamp(200px, 60%, 300px);
+		}
+	}
+	
+	.wp-block-query.is-style-carousel-cover {
+		.wp-block-post-template > li {
+			height: 250px;
+			
+			.wp-block-post-title {
+				font-size: 1.25rem;
+				bottom: 1rem;
+				left: 1rem;
+				right: 1rem;
+			}
+		}
+	}
+}
+]]></content>
+  </file>
+  <file path="src/editor.scss">
+    <description>This file contains styles for the block in the editor.</description>
+    <content><![CDATA[
+/**
+ * Editor-specific styles for Query Loop Carousel variations
+ */
+
+.wp-block-telex-query-loop-carousel {
+	padding: 1rem;
+	background: #f0f0f0;
+	border-radius: 4px;
+	text-align: center;
+}
+
+/* Apply frontend styles in editor for preview */
+.editor-styles-wrapper {
+	.wp-block-query.is-style-carousel-image-title,
+	.wp-block-query.is-style-carousel-cover {
+		position: relative;
+		
+		.wp-block-post-template {
+			display: flex;
+			flex-wrap: nowrap;
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			gap: 1.5rem;
+			padding: 0 2.5rem;
+			
+			> li {
+				flex: 0 0 auto;
+				width: clamp(250px, 33.333%, 400px);
+				list-style: none;
+			}
+		}
+	}
+	
+	.wp-block-query.is-style-carousel-image-title {
+		.wp-block-post-template > li {
+			display: flex;
+			flex-direction: column;
+			
+			.wp-block-post-featured-image {
+				margin-bottom: 0.75rem;
+				
+				img {
+					width: 100%;
+					height: 200px;
+					object-fit: cover;
+					border-radius: 4px;
+				}
+			}
+			
+			.wp-block-post-title {
+				font-size: 1.125rem;
+				line-height: 1.4;
+				margin: 0;
+			}
+		}
+	}
+	
+	.wp-block-query.is-style-carousel-cover {
+		.wp-block-post-template > li {
+			position: relative;
+			height: 300px;
+			border-radius: 4px;
+			overflow: hidden;
+			
+			.wp-block-post-featured-image {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+				
+				&::after {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+				}
+			}
+			
+			.wp-block-post-title {
+				position: absolute;
+				bottom: 1.5rem;
+				left: 1.5rem;
+				right: 1.5rem;
+				z-index: 1;
+				font-size: 1.5rem;
+				line-height: 1.3;
+				margin: 0;
+				color: #fff;
+				text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+			}
+		}
+	}
+}
+]]></content>
+  </file>
+  <file path="src/view.js">
+    <description>This file contains the view function for the block which is responsible for rendering interactive behaviors of the block on the front end.</description>
+    <content><![CDATA[
+/**
+ * Frontend JavaScript for Query Loop Carousel
+ * Handles arrow navigation and infinite scrolling
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+	const carousels = document.querySelectorAll('.is-style-carousel-image-title, .is-style-carousel-cover');
+	
+	carousels.forEach(function(carousel) {
+		const container = carousel.querySelector('.wp-block-post-template');
+		if (!container) return;
+		
+		const items = container.querySelectorAll('li');
+		if (items.length === 0) return;
+		
+		// Create navigation arrows
+		const prevArrow = document.createElement('button');
+		prevArrow.className = 'carousel-nav carousel-prev';
+		prevArrow.setAttribute('aria-label', 'Previous');
+		prevArrow.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>';
+		
+		const nextArrow = document.createElement('button');
+		nextArrow.className = 'carousel-nav carousel-next';
+		nextArrow.setAttribute('aria-label', 'Next');
+		nextArrow.innerHTML = '<svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>';
+		
+		carousel.appendChild(prevArrow);
+		carousel.appendChild(nextArrow);
+		
+		// Get item width including gap
+		function getItemWidth() {
+			const item = items[0];
+			const styles = window.getComputedStyle(container);
+			const gap = parseFloat(styles.gap) || 0;
+			return item.offsetWidth + gap;
+		}
+		
+		// Get current scroll position as item index
+		function getCurrentIndex() {
+			const scrollLeft = container.scrollLeft;
+			const itemWidth = getItemWidth();
+			return Math.round(scrollLeft / itemWidth);
+		}
+		
+		// Scroll to specific item index
+		function scrollToIndex(index) {
+			const itemWidth = getItemWidth();
+			container.scrollTo({
+				left: index * itemWidth,
+				behavior: 'smooth'
+			});
+		}
+		
+		// Navigate to previous item
+		function navigatePrev() {
+			let currentIndex = getCurrentIndex();
+			
+			if (currentIndex === 0) {
+				// Loop to last item
+				scrollToIndex(items.length - 1);
+			} else {
+				scrollToIndex(currentIndex - 1);
+			}
+		}
+		
+		// Navigate to next item
+		function navigateNext() {
+			let currentIndex = getCurrentIndex();
+			
+			if (currentIndex >= items.length - 1) {
+				// Loop to first item
+				scrollToIndex(0);
+			} else {
+				scrollToIndex(currentIndex + 1);
+			}
+		}
+		
+		// Event listeners
+		prevArrow.addEventListener('click', navigatePrev);
+		nextArrow.addEventListener('click', navigateNext);
+		
+		// Keyboard navigation
+		carousel.addEventListener('keydown', function(e) {
+			if (e.key === 'ArrowLeft') {
+				e.preventDefault();
+				navigatePrev();
+			} else if (e.key === 'ArrowRight') {
+				e.preventDefault();
+				navigateNext();
+			}
+		});
+		
+		// Update arrow visibility based on scroll position
+		function updateArrowVisibility() {
+			const scrollLeft = container.scrollLeft;
+			const maxScroll = container.scrollWidth - container.clientWidth;
+			
+			// Always show arrows since we have infinite looping
+			prevArrow.style.opacity = '1';
+			nextArrow.style.opacity = '1';
+		}
+		
+		container.addEventListener('scroll', updateArrowVisibility);
+		updateArrowVisibility();
+	});
+});
+]]></content>
+  </file>
+  <file path="src/render.php">
+    <description>This file contains the render callback function for the block, which is responsible for rendering the block content on the front end. A render function should exist only if the block is dynamic.</description>
+    <content><![CDATA[]]></content>
+  </file>
+  <file path="package.json">
+    <description>This file includes the necessary scripts for building, formatting, and linting the block code. Dependencies are managed at the workspace level via pnpm.</description>
+    <content><![CDATA[
+{
+	"name": "query-loop-carousel",
+	"version": "0.1.0",
+	"description": "Adds carousel style variations to the Query Loop block",
+	"author": "WordPress Telex",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.15.0"
+	}
+}
+]]></content>
+  </file>
+</artefact>

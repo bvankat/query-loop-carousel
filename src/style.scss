@@ -1,0 +1,183 @@
+
+/**
+ * Frontend styles for Query Loop Carousel variations
+ */
+
+/* Common carousel styles */
+.wp-block-query.is-style-carousel-image-title,
+.wp-block-query.is-style-carousel-cover {
+	position: relative;
+	
+	.wp-block-post-template {
+		display: flex;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-behavior: smooth;
+		gap: 1.5rem;
+		padding: 0 2.5rem;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		
+		> li {
+			flex: 0 0 auto;
+			width: clamp(250px, 33.333%, 400px);
+			scroll-snap-align: start;
+			list-style: none;
+		}
+	}
+	
+	/* Navigation arrows */
+	.carousel-nav {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		background: rgba(255, 255, 255, 0.9);
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		z-index: 10;
+		transition: all 0.2s ease;
+		
+		&:hover {
+			background: rgba(255, 255, 255, 1);
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		}
+		
+		&.carousel-prev {
+			left: 0;
+		}
+		
+		&.carousel-next {
+			right: 0;
+		}
+		
+		svg {
+			width: 20px;
+			height: 20px;
+			fill: currentColor;
+		}
+	}
+}
+
+/* Variation 1: Featured Image + Title */
+.wp-block-query.is-style-carousel-image-title {
+	.wp-block-post-template > li {
+		display: flex;
+		flex-direction: column;
+		
+		.wp-block-post-featured-image {
+			margin-bottom: 0.75rem;
+			
+			img {
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+				border-radius: 4px;
+			}
+		}
+		
+		.wp-block-post-title {
+			font-size: 1.125rem;
+			line-height: 1.4;
+			margin: 0;
+			
+			a {
+				text-decoration: none;
+				color: inherit;
+				
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}
+
+/* Variation 2: Cover Style with Overlay */
+.wp-block-query.is-style-carousel-cover {
+	.wp-block-post-template > li {
+		position: relative;
+		height: 300px;
+		border-radius: 4px;
+		overflow: hidden;
+		
+		.wp-block-post-featured-image {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+			}
+		}
+		
+		.wp-block-post-title {
+			position: absolute;
+			bottom: 1.5rem;
+			left: 1.5rem;
+			right: 1.5rem;
+			z-index: 1;
+			font-size: 1.5rem;
+			line-height: 1.3;
+			margin: 0;
+			
+			a {
+				text-decoration: none;
+				color: #fff;
+				text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+				
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.wp-block-query.is-style-carousel-image-title,
+	.wp-block-query.is-style-carousel-cover {
+		.wp-block-post-template > li {
+			width: clamp(200px, 60%, 300px);
+		}
+	}
+	
+	.wp-block-query.is-style-carousel-cover {
+		.wp-block-post-template > li {
+			height: 250px;
+			
+			.wp-block-post-title {
+				font-size: 1.25rem;
+				bottom: 1rem;
+				left: 1rem;
+				right: 1rem;
+			}
+		}
+	}
+}
